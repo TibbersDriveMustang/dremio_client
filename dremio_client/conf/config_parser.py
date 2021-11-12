@@ -29,6 +29,7 @@ import confuse
 
 def _get_env_args():
     args = dict()
+    #TODO DREMIO_CLIENTDIR not in use
     for k, v in os.environ.items():
         if "DREMIO_" in k and k != "DREMIO_CLIENTDIR":
             name = k.replace("DREMIO_", "").lower().replace("_", ".")
@@ -41,7 +42,15 @@ def _get_env_args():
 
 
 def build_config(args=None):
+    AE_DEFAULT_FILE_PATH = '/var/run/secrets/user_credentials/dremio_client'
+    # AE_DEFAULT_FILE_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/dremio_client'
     config = confuse.Configuration("dremio_client", __name__)
+    if 'DREMIO_CLIENTDIR' in os.environ:
+        config.set_file(os.environ["DREMIO_CLIENTDIR"] + '/dremio_client')
+    elif os.path.isfile(AE_DEFAULT_FILE_PATH):
+        # Check AE Secret path
+        config.set_file(AE_DEFAULT_FILE_PATH)
+
     if args:
         config.set_args(args, dots=True)
     env_args = _get_env_args()
