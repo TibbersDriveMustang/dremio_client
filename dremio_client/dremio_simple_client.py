@@ -93,6 +93,7 @@ class SimpleClient(object):
         )
         self._token = auth(self._base_url, config)
         self._ssl_verify = config["verify"].get(bool)
+        self._isAE = config["isAE"].get(bool)
 
     def catalog(self):
         return catalog(self._token, self._base_url, ssl_verify=self._ssl_verify)

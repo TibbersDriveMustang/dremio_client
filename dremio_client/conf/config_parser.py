@@ -23,9 +23,11 @@
 # under the License.
 #
 import os
+import shutil
 
 import confuse
 
+DEBUG = False
 
 def _get_env_args():
     args = dict()
@@ -40,16 +42,25 @@ def _get_env_args():
             args[name] = v
     return args
 
-
 def build_config(args=None):
-    AE_DEFAULT_FILE_PATH = '/var/run/secrets/user_credentials/dremio_client'
-    # AE_DEFAULT_FILE_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/dremio_client'
     config = confuse.Configuration("dremio_client", __name__)
-    if 'DREMIO_CLIENTDIR' in os.environ:
-        config.set_file(os.environ["DREMIO_CLIENTDIR"] + '/dremio_client')
-    elif os.path.isfile(AE_DEFAULT_FILE_PATH):
-        # Check AE Secret path
-        config.set_file(AE_DEFAULT_FILE_PATH)
+    if 'ANACONDA_PROJECT_ENVS_PATH' in os.environ or DEBUG:
+        if DEBUG:
+            AE_DEFAULT_SECRET_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/dremio_client'
+            DREMIO_CONFIG_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/config.yaml'
+        else:
+            AE_DEFAULT_SECRET_PATH = '/var/run/secrets/user_credentials/dremio_client'
+            DREMIO_CONFIG_PATH = '/opt/continuum/.config/dremio_client/config.yaml'
+
+        # if 'DREMIO_CLIENTDIR' in os.environ:
+        #     config.set_file(os.environ["DREMIO_CLIENTDIR"] + '/dremio_client')
+        if os.path.isfile(AE_DEFAULT_SECRET_PATH):
+            # Check AE Secret path
+            shutil.copy(AE_DEFAULT_SECRET_PATH, DREMIO_CONFIG_PATH)
+            config.set_file(DREMIO_CONFIG_PATH)
+            config['isAE'] = True
+        else:
+            raise NotImplementedError("Found no Dremio credential, please config your AE Secret")
 
     if args:
         config.set_args(args, dots=True)

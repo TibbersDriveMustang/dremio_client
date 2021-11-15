@@ -70,6 +70,7 @@ class DremioClient(object):
         self._password = config["auth"]["password"].get()
         self._token = auth(self._base_url, config)
         self._ssl_verify = config["verify"].get(bool)
+        self._isAE = config["isAE"].get(bool)
         self._catalog = catalog(self._token, self._base_url, self.query, self._ssl_verify)
         self._reflections = list()
         self._wlm_queues = list()
