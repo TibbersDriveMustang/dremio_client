@@ -42,16 +42,16 @@ requirements:
     - simplejson
     - pyodbc
 
-test:
-  imports:
-    - dremio_client
-    - dremio_client.auth
-    - dremio_client.conf
-    - dremio_client.flight
-    - dremio_client.model
-    - dremio_client.util
-  commands:
-    - dremio_client --help
+#test:
+#  imports:
+#    - dremio_client
+#    - dremio_client.auth
+#    - dremio_client.conf
+#    - dremio_client.flight
+#    - dremio_client.model
+#    - dremio_client.util
+#  commands:
+#    - dremio_client --help
 
 about:
   home: https://github.com/rymurr/dremio_client
@@ -62,6 +62,6 @@ about:
   doc_url: https://dremio-client.readthedocs.io/
   dev_url: https://github.com/rymurr/dremio_client
 
-extra:
-  recipe-maintainers:
-    - rymurr
+#extra:
+#  recipe-maintainers:
+#    - rymurr
