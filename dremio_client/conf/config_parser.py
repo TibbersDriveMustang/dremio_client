@@ -44,6 +44,7 @@ def _get_env_args():
 
 def build_config(args=None):
     config = confuse.Configuration("dremio_client", __name__)
+    config['isAE'] = False
     if 'ANACONDA_PROJECT_ENVS_PATH' in os.environ or DEBUG:
         if DEBUG:
             AE_DEFAULT_SECRET_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/dremio_client'
