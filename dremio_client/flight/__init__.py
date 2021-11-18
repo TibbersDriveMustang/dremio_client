@@ -65,7 +65,7 @@ try:
             self.call_credential = call_credential
 
     def connect(
-        hostname="localhost", port=47470, username="dremio", password="dremio123", tls_root_certs_filename=None
+        hostname="localhost", port=32010, username="dremio", password="dremio123", tls_root_certs_filename=None
     ):
         """
         Connect to and authenticate against Dremio's arrow flight server. Auth is skipped if username is None
@@ -133,7 +133,8 @@ try:
         if not client:
             client = connect(hostname, port, username, password, tls_root_certs_filename)
 
-        info = client.get_flight_info(flight.FlightDescriptor.for_command(sql))
+        flight_descriptor = flight.FlightDescriptor.for_command(sql)
+        info = client.get_flight_info(flight_descriptor)
         reader = client.do_get(info.endpoints[0].ticket)
         batches = []
         while True:

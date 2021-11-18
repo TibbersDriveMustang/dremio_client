@@ -24,6 +24,7 @@
 #
 import os
 import shutil
+import logging
 
 import confuse
 
@@ -46,9 +47,10 @@ def build_config(args=None):
     config = confuse.Configuration("dremio_client", __name__)
     config['isAE'] = False
     if 'ANACONDA_PROJECT_ENVS_PATH' in os.environ or DEBUG:
+        logging.warning('AE env detected')
         if DEBUG:
             AE_DEFAULT_SECRET_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/dremio_client'
-            DREMIO_CONFIG_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/dremio_client/config.yaml'
+            DREMIO_CONFIG_PATH = '/Users/hongyiguo/Desktop/HKEX/Sanctum/dremio_client/tests/config.yaml'
         else:
             AE_DEFAULT_SECRET_PATH = '/var/run/secrets/user_credentials/dremio_client'
             DREMIO_CONFIG_PATH = '/opt/continuum/.config/dremio_client/config.yaml'

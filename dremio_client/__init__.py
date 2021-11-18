@@ -24,15 +24,18 @@
 #
 from __future__ import absolute_import, division, print_function
 import os
+import logging
 
 from .conf import build_config
 from .dremio_client import DremioClient
 from .dremio_simple_client import SimpleClient
 from .model.endpoints import catalog, catalog_item, job_results, job_status, sql
 
+logging.basicConfig(level=logging.DEBUG)
+
 __author__ = """Ryan Murray"""
 __email__ = "rymurr@gmail.com"
-__version__ = "0.15.2"
+__version__ = "0.15.4"
 
 
 def get_config(config_dir=None, args=None):
