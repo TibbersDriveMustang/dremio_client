@@ -24,6 +24,8 @@
 #
 import base64
 
+ARROW_FLIGHT_DEFAULT_PORT = 32010
+
 try:
     import pyarrow as pa
     from pyarrow import flight
@@ -67,7 +69,7 @@ try:
             self.call_credential = call_credential
 
     def connect(
-        hostname="localhost", port=32010, username="dremio", password="dremio123", tls_root_certs_filename=None
+        hostname="localhost", port=ARROW_FLIGHT_DEFAULT_PORT, username="dremio", password="dremio123", tls_root_certs_filename=None
     ):
         """
         Connect to and authenticate against Dremio's arrow flight server. Auth is skipped if username is None
@@ -113,7 +115,7 @@ try:
         sql,
         client=None,
         hostname="localhost",
-        port=47470,
+        port=ARROW_FLIGHT_DEFAULT_PORT,
         username="dremio",
         password="dremio123",
         pandas=True,
