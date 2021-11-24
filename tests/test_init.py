@@ -22,3 +22,16 @@ def test_arrow_flight():
     print(my_source_content)
     assert my_source_content is not None
 
+def test_arrow_flight_client_reuse():
+    client = init()
+    root = client.data
+
+    my_source = root.hkex_sandbox_test.test.get()
+    # my_source = root.as_stm_sanctumapp.test.get()
+    my_source_content = my_source.query()
+    print(my_source_content)
+
+    my_source = root.hkex_sandbox_test.test.get()
+    # my_source = root.as_stm_sanctumapp.test.get()
+    my_source_content = my_source.query()
+    print(my_source_content)

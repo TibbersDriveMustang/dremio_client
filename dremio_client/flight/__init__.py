@@ -25,11 +25,14 @@
 import base64
 
 ARROW_FLIGHT_DEFAULT_PORT = 32010
+DEFAULT_SSL_ROOT_CERT = '/etc/ssl/certs/ca-chain.pem'
 
 try:
     import pyarrow as pa
     from pyarrow import flight
     from .flight_auth import HttpDremioClientAuthHandler
+
+    CLIENT = None
 
     class DremioClientAuthMiddleware(flight.ClientMiddleware):
         """
@@ -136,11 +139,17 @@ try:
         :param tls_root_certs_filename: use ssl to connect with root certs from filename
         :return:
         """
-        if not client:
-            call_options, client = connect(hostname, port, username, password, tls_root_certs_filename)
+        global CLIENT
 
-        info = client.get_flight_info(flight.FlightDescriptor.for_command(sql), call_options)
-        reader = client.do_get(info.endpoints[0].ticket, call_options)
+        if not CLIENT:
+            if not tls_root_certs_filename:
+                tls_root_certs_filename = DEFAULT_SSL_ROOT_CERT
+            call_options, CLIENT = connect(hostname, port, username, password, tls_root_certs_filename)
+        else:
+            pass
+
+        info = CLIENT.get_flight_info(flight.FlightDescriptor.for_command(sql), call_options)
+        reader = CLIENT.do_get(info.endpoints[0].ticket, call_options)
         batches = []
         while True:
             try:
