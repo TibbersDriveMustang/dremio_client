@@ -1,5 +1,5 @@
 {% set name = "dremio_client" %}
-{% set version = "0.15.2b" %}
+{% set version = "0.15.2" %}
 
 package:
   name: "{{ name|lower }}"
@@ -12,7 +12,7 @@ source:
 
 build:
   noarch: python
-  number: 2
+  number: 0
   entry_points:
     - dremio_client=dremio_client.cli:cli
   script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
