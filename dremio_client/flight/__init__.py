@@ -24,9 +24,9 @@
 #
 import base64
 import logging
+from dremio_client import DEFAULT_SSL_ROOT_CERT
 
 ARROW_FLIGHT_DEFAULT_PORT = 32010
-DEFAULT_SSL_ROOT_CERT = '/etc/ssl/certs/ca-chain.pem'
 
 try:
     import pyarrow as pa

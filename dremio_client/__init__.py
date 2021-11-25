@@ -36,6 +36,7 @@ __author__ = """Ryan Murray"""
 __email__ = "rymurr@gmail.com"
 __version__ = "0.15.2"
 
+DEFAULT_SSL_ROOT_CERT = '/etc/ssl/certs/ca-chain.pem'
 
 def get_config(config_dir=None, args=None):
     if config_dir:
@@ -69,6 +70,15 @@ def init(config_dir=None, simple_client=False, config_dict=None, debug=False):
     else:
         logging.basicConfig(level=logging.WARNING)
 
+    # disable insecure warning
+    try:
+        import urllib3
+        urllib3.PoolManager(
+            ca_certs=DEFAULT_SSL_ROOT_CERT
+        )
+    except Exception as e:
+        logging.warning('import urllib3 cert failed: {}'.format(e))
+
     if config_dict is None:
         config_dict = dict()
     config = get_config(config_dir, args=config_dict)
@@ -81,7 +91,7 @@ def _connect(config, simple=False):
     return DremioClient(config)
 
 
-__all__ = ["init", "catalog", "catalog_item", "sql", "job_status", "job_results"]
+__all__ = ["init", "catalog", "catalog_item", "sql", "job_status", "job_results", 'DEFAULT_SSL_ROOT_CERT', '__version__']
 
 # https://github.com/ipython/ipython/issues/11653
 # autocomplete doesn't work when using jedi so turn it off!
