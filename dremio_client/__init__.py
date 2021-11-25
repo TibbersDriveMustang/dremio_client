@@ -31,8 +31,6 @@ from .dremio_client import DremioClient
 from .dremio_simple_client import SimpleClient
 from .model.endpoints import catalog, catalog_item, job_results, job_status, sql
 
-logger = logging.getLogger()
-logger.setLevel(logging.ERROR)  # NOTSET DEBUG INFO WARNING ERROR CRITICAL
 
 __author__ = """Ryan Murray"""
 __email__ = "rymurr@gmail.com"
@@ -67,7 +65,9 @@ def init(config_dir=None, simple_client=False, config_dict=None, debug=False):
     >>> client = init('/my/config/dir')
     """
     if debug:
-        logging.getLogger().setLevel(logging.DEBUG)
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.WARNING)
 
     if config_dict is None:
         config_dict = dict()

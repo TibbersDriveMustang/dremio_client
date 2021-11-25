@@ -94,7 +94,7 @@ try:
             # use default unencrypted TCP connection
             pass
 
-        logging.critical('Use ArrowFlight, schema: {}'.format(scheme))
+        logging.info('Use ArrowFlight, schema: {}'.format(scheme))
 
         # Two WLM settings can be provided upon initial authentication
         # with the Dremio Server Flight Endpoint:
