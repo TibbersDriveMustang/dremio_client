@@ -33,6 +33,7 @@ try:
     from .flight_auth import HttpDremioClientAuthHandler
 
     CLIENT = None
+    CALL_OPTIONS = None
 
     class DremioClientAuthMiddleware(flight.ClientMiddleware):
         """
@@ -137,17 +138,17 @@ try:
         :param tls_root_certs_filename: use ssl to connect with root certs from filename
         :return:
         """
-        global CLIENT
+        global CLIENT, CALL_OPTIONS
 
         if not CLIENT:
             if not tls_root_certs_filename:
                 tls_root_certs_filename = DEFAULT_SSL_ROOT_CERT
-            call_options, CLIENT = connect(hostname, port, username, password, tls_root_certs_filename)
+            CALL_OPTIONS, CLIENT = connect(hostname, port, username, password, tls_root_certs_filename)
         else:
             pass
 
-        info = CLIENT.get_flight_info(flight.FlightDescriptor.for_command(sql), call_options)
-        reader = CLIENT.do_get(info.endpoints[0].ticket, call_options)
+        info = CLIENT.get_flight_info(flight.FlightDescriptor.for_command(sql), CALL_OPTIONS)
+        reader = CLIENT.do_get(info.endpoints[0].ticket, CALL_OPTIONS)
         batches = []
         while True:
             try:
