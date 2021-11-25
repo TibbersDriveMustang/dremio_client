@@ -26,7 +26,6 @@ import logging
 
 try:
     import pandas as pd
-
     NO_PANDAS = False
 except ImportError:
     NO_PANDAS = True
@@ -57,13 +56,13 @@ def query(
                 sql, hostname=hostname, port=flight_port, username=username, password=password, pandas=pandas
             )
         except Exception as e:
-            logging.warning("Unable to run query as flight, downgrading to odbc: {}".format(e))
+            logging.critical("Unable to run query as flight, downgrading to odbc: {}".format(e))
             failed = True
     if method == "odbc" or failed:
         try:
             return _odbc_query(sql, hostname=hostname, port=odbc_port, username=username, password=password)
         except Exception as e:
-            logging.warning("Unable to run query as odbc, downgrading to rest: {}".format(e))
+            logging.critical("Unable to run query as odbc, downgrading to rest: {}".format(e))
     results = _rest_query(token, base_url, sql, ssl_verify=ssl_verify)
     if pandas and not NO_PANDAS:
         return pd.concat(pd.DataFrame(i['rows']) for i in results)

@@ -23,6 +23,7 @@
 # under the License.
 #
 import base64
+import logging
 
 ARROW_FLIGHT_DEFAULT_PORT = 32010
 DEFAULT_SSL_ROOT_CERT = '/etc/ssl/certs/ca-chain.pem'
@@ -31,9 +32,6 @@ try:
     import pyarrow as pa
     from pyarrow import flight
     from .flight_auth import HttpDremioClientAuthHandler
-
-    CLIENT = None
-    CALL_OPTIONS = None
 
     class DremioClientAuthMiddleware(flight.ClientMiddleware):
         """
@@ -96,6 +94,8 @@ try:
             # use default unencrypted TCP connection
             pass
 
+        logging.critical('Use ArrowFlight, schema: {}'.format(scheme))
+
         # Two WLM settings can be provided upon initial authentication
         # with the Dremio Server Flight Endpoint:
         # - routing-tag
@@ -138,17 +138,13 @@ try:
         :param tls_root_certs_filename: use ssl to connect with root certs from filename
         :return:
         """
-        global CLIENT, CALL_OPTIONS
 
-        if not CLIENT:
-            if not tls_root_certs_filename:
-                tls_root_certs_filename = DEFAULT_SSL_ROOT_CERT
-            CALL_OPTIONS, CLIENT = connect(hostname, port, username, password, tls_root_certs_filename)
-        else:
-            pass
+        if not tls_root_certs_filename:
+            tls_root_certs_filename = DEFAULT_SSL_ROOT_CERT
+        call_options, client = connect(hostname, port, username, password, tls_root_certs_filename)
 
-        info = CLIENT.get_flight_info(flight.FlightDescriptor.for_command(sql), CALL_OPTIONS)
-        reader = CLIENT.do_get(info.endpoints[0].ticket, CALL_OPTIONS)
+        info = client.get_flight_info(flight.FlightDescriptor.for_command(sql), call_options)
+        reader = client.do_get(info.endpoints[0].ticket, call_options)
         batches = []
         while True:
             try:

@@ -27,7 +27,7 @@
 """The setup script."""
 
 from setuptools import find_packages, setup
-
+from dremio_client import __version__
 
 with open("README.rst") as readme_file:
     readme = readme_file.read()
@@ -82,7 +82,7 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/rymurr/dremio_client",
-    version="0.15.2b",
+    version=__version__,
     zip_safe=False,
     extras_require={
         ':python_version == "2.7"': ["futures"],

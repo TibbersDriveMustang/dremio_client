@@ -32,7 +32,7 @@ from .dremio_simple_client import SimpleClient
 from .model.endpoints import catalog, catalog_item, job_results, job_status, sql
 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)  # NOTSET DEBUG INFO WARNING ERROR CRITICAL
+logger.setLevel(logging.ERROR)  # NOTSET DEBUG INFO WARNING ERROR CRITICAL
 
 __author__ = """Ryan Murray"""
 __email__ = "rymurr@gmail.com"
@@ -45,7 +45,7 @@ def get_config(config_dir=None, args=None):
     return build_config(args)
 
 
-def init(config_dir=None, simple_client=False, config_dict=None):
+def init(config_dir=None, simple_client=False, config_dict=None, debug=False):
     """create a new Dremio client object
 
     This returns a rich client by default. This client abstracts the Dremio catalog into a
@@ -55,6 +55,7 @@ def init(config_dir=None, simple_client=False, config_dict=None):
     The simple client simply wraps the Dremio REST endpoints an returns ``dict`` objects
 
 
+    :param debug:
     :param isAE: is running in Anaconda Enterprise
     :param config_dir: optional directory to look for config in
     :param simple_client: return the 'simple' client.
@@ -65,6 +66,9 @@ def init(config_dir=None, simple_client=False, config_dict=None):
 
     >>> client = init('/my/config/dir')
     """
+    if debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
     if config_dict is None:
         config_dict = dict()
     config = get_config(config_dir, args=config_dict)
