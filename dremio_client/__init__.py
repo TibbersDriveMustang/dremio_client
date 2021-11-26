@@ -34,7 +34,7 @@ from .flight.flight_auth import DEFAULT_SSL_ROOT_CERT
 
 __author__ = """Ryan Murray"""
 __email__ = "rymurr@gmail.com"
-__version__ = "0.16.0"
+__version__ = "0.15.1a"
 
 
 def get_config(config_dir=None, args=None):
