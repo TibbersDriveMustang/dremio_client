@@ -30,13 +30,12 @@ from .conf import build_config
 from .dremio_client import DremioClient
 from .dremio_simple_client import SimpleClient
 from .model.endpoints import catalog, catalog_item, job_results, job_status, sql
-
+from .flight.flight_auth import DEFAULT_SSL_ROOT_CERT
 
 __author__ = """Ryan Murray"""
 __email__ = "rymurr@gmail.com"
-__version__ = "0.15.2"
+__version__ = "0.15.1"
 
-DEFAULT_SSL_ROOT_CERT = '/etc/ssl/certs/ca-chain.pem'
 
 def get_config(config_dir=None, args=None):
     if config_dir:
@@ -74,6 +73,7 @@ def init(config_dir=None, simple_client=False, config_dict=None, debug=False):
     try:
         import urllib3
         urllib3.PoolManager(
+            cert_reqs='CERT_REQUIRED',
             ca_certs=DEFAULT_SSL_ROOT_CERT
         )
     except Exception as e:

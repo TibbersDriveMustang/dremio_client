@@ -24,14 +24,13 @@
 #
 import base64
 import logging
-from dremio_client import DEFAULT_SSL_ROOT_CERT
 
 ARROW_FLIGHT_DEFAULT_PORT = 32010
 
 try:
     import pyarrow as pa
     from pyarrow import flight
-    from .flight_auth import HttpDremioClientAuthHandler
+    from .flight_auth import HttpDremioClientAuthHandler, DEFAULT_SSL_ROOT_CERT
 
     class DremioClientAuthMiddleware(flight.ClientMiddleware):
         """

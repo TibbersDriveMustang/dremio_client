@@ -23,7 +23,7 @@
 # under the License.
 #
 from pyarrow.flight import BasicAuth, ClientAuthHandler
-
+DEFAULT_SSL_ROOT_CERT = '/etc/ssl/certs/ca-chain.pem'
 
 class HttpDremioClientAuthHandler(ClientAuthHandler):
     def __init__(self, username, password):
