@@ -463,7 +463,8 @@ class Catalog(dict):
                 self.update(obj)
                 self.meta = attr.evolve(self.meta, **{k: v for k, v in attr.asdict(obj.meta).items() if v})
                 return list(self.keys())
-        return list(self.keys()) + ["_repr_html_"]
+        tmp = list(self.keys()) + ["_repr_html_"]
+        return tmp
 
     def to_json(self):
         result = attr.asdict(self.meta)
@@ -477,19 +478,31 @@ class Catalog(dict):
             result["children"] = children
         return json.dumps(result)
 
-    def __getattr__(self, item):
-        if item == "_ipython_canary_method_should_not_exist_":
+    def __getattr__(self, item_name):
+        if item_name == "_ipython_canary_method_should_not_exist_":
             raise AttributeError
         try:
-            value = dict.__getitem__(self, item)
-            if value is None:
+            keys1 = self.keys()
+            if item_name == 'test2021':
+                item = dict.__getitem__(self, item_name)
+                # testItem = dict.__getitem__(self, 'test')
+
+            if item_name == '2021':
+                self.__dir__()
+                item = dict.__getitem__(self, item_name)
+                return item
+
+            item = dict.__getitem__(self, item_name)
+            if item is None:
                 raise KeyError()
-            if isinstance(value, Catalog) and value["_base_url"] is None:
+            if isinstance(item, Catalog) and item["_base_url"] is None:
                 raise KeyError()
-            return value
-        except KeyError:
+            return item
+        except KeyError as e:
             self.__dir__()
-            return dict.__getitem__(self, item)
+            keys2 = self.keys()
+            item_dir = dict.__getitem__(self, item_name)
+            return item_dir
 
     def wiki(self):
         result = collaboration_wiki(self._token, self._base_url, self.meta.id, ssl_verify=self._ssl_verify)
@@ -540,7 +553,7 @@ def _put(self):
         if i in json:
             del json[i]
     cid = self.meta.id
-    
+
     result = update_catalog(self._token, self._base_url, cid, json, self._ssl_verify)
     _, obj = create(result, self._token, self._base_url, self._flight_endpoint, ssl_verify=self._ssl_verify)
     return obj.meta
