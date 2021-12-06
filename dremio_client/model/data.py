@@ -26,6 +26,7 @@
 import attr
 import simplejson as json
 from six.moves.urllib.parse import quote
+import re
 
 from ..error import DremioException
 from ..util import refresh_metadata
@@ -482,27 +483,15 @@ class Catalog(dict):
         if item_name == "_ipython_canary_method_should_not_exist_":
             raise AttributeError
         try:
-            keys1 = self.keys()
-            if item_name == 'test2021':
-                item = dict.__getitem__(self, item_name)
-                # testItem = dict.__getitem__(self, 'test')
-
-            if item_name == '2021':
-                self.__dir__()
-                item = dict.__getitem__(self, item_name)
-                return item
-
             item = dict.__getitem__(self, item_name)
             if item is None:
                 raise KeyError()
-            if isinstance(item, Catalog) and item["_base_url"] is None:
-                raise KeyError()
+            if isinstance(item, Catalog) and "__base_url" not in item:
+                raise KeyError("_base_url")
             return item
         except KeyError as e:
             self.__dir__()
-            keys2 = self.keys()
-            item_dir = dict.__getitem__(self, item_name)
-            return item_dir
+            return dict.__getitem__(self, item_name)
 
     def wiki(self):
         result = collaboration_wiki(self._token, self._base_url, self.meta.id, ssl_verify=self._ssl_verify)

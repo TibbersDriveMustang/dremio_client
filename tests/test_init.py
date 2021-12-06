@@ -35,10 +35,11 @@ def test_arrow_flight_number_path():
     client = init()
     root = client.data
 
-    my_source = root.hkex_sandbox_test.__getattr__('2021').test1.get()
+    # my_source = root.hkex_sandbox_test.__getattr__('2021').test1.get()
+    # my_source = root.hkex_sandbox_test.__getattr__('2021folder').test3.get()
     # my_source = root.hkex_sandbox_test.test.get()
     # my_source = root.hkex_sandbox_test.test2021.test2.get()
-    # my_source = root.ng_test_space.ng_test_folder.test_1028.get()
+    my_source = root.ng_test_space.ng_test_folder.test_1028.get()
     # my_source = root.as_stm_sanctumapp.test.get()
     my_source_content = my_source.query()
     print(my_source_content)
