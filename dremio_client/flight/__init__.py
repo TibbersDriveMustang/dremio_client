@@ -135,7 +135,7 @@ try:
         :param password: Password on Dremio (optional)
         :param pandas: return a pandas dataframe (default) or an arrow table
         :param tls_root_certs_filename: use ssl to connect with root certs from filename
-        :return:
+        :return: pyarrow.Table
         """
 
         if not tls_root_certs_filename:
@@ -145,17 +145,24 @@ try:
         info = client.get_flight_info(flight.FlightDescriptor.for_command(sql), call_options)
         reader = client.do_get(info.endpoints[0].ticket, call_options)
         batches = []
+
+        # TODO try with read_all
+        # reader.read_all()
         while True:
             try:
                 batch, _ = reader.read_chunk()
                 batches.append(batch)
             except StopIteration:
                 break
-        data = pa.Table.from_batches(batches)
-        if pandas:
-            return data.to_pandas()
-        else:
-            return data
+
+        # Data Type in batches: pyarrow.RecordBatch
+        table = pa.Table.from_batches(batches)
+        return table
+        # if pandas:
+        #     # TODO crashes when processing large siez data, e.g 18 GB, will lead to jupyter core dump around 34GB
+        #     return table.to_pandas()
+        # else:
+        #     return table
 
 
 except ImportError:

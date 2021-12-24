@@ -1,11 +1,11 @@
 {% set name = "dremio_client" %}
-{% set version = "0.15.1a" %}
+{% set version = "0.15.2b" %}
 
 package:
   name: "{{ name|lower }}"
   version: "{{ version }}"
 source:
-    path: ../
+  path: ../
 #  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
 #  sha256: 5538ad5fe14ec56bf24ff2b565fa716f140921e95af59ff64032a50a45517d94
 
