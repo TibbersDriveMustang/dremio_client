@@ -100,9 +100,9 @@ try:
 except NameError:
     pass
 else:
-    from IPython import __version__
+    from IPython import __version__ as __ipython_version__
 
-    major = int(__version__.split(".")[0])
+    major = int(__ipython_version__.split(".")[0])
     if major >= 6:
         from IPython import get_ipython
 
